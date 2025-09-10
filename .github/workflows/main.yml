@@ -48,7 +48,7 @@ jobs:
             --gen2 \
             --runtime nodejs20 \
             --region "$REGION" \
-            --project "PROJECT" \
+            --project "$PROJECT" \
             --trigger-http \
             --allow-unauthenticated \
             --entry-point helloHttp \
