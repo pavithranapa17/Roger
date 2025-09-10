@@ -39,7 +39,7 @@ jobs:
       - name: Verify gcloud
         run: gcloud info
 
-      - name: Deploy (Gen1)
+      - name: Deploy (Gen2)
         run: |
           gcloud functions deploy hellohttp-roger \
             --gen2
