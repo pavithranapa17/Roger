@@ -40,12 +40,15 @@ jobs:
         run: gcloud info
 
       - name: Deploy (Gen2)
+        env:
+          REGION: ${{ secrets.GCP_REGION }}
+          PROJECT: ${{ secrets.GCP_PROJECT_ID }}
         run: |
           gcloud functions deploy hellohttp-roger \
-            --gen2
+            --gen2 \
             --runtime nodejs20 \
-            --region "${{ secrets.GCP_REGION }}" \
-            --project "${{ secrets.GCP_PROJECT_ID }}" \
+            --region "$REGION" \
+            --project "PROJECT" \
             --trigger-http \
             --allow-unauthenticated \
             --entry-point helloHttp \
