@@ -34,15 +34,15 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: ${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}
 
       - name: Verify gcloud
         run: gcloud info
 
       - name: Deploy (Gen2)
         env:
-          REGION: ${{ secrets.GCP_REGION }}
-          PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ secrets.GOOGLE_FUNCTIONS_REGION }}
+          PROJECT: ${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}
         run: |
           gcloud functions deploy hellohttp-roger \
             --gen2 \
