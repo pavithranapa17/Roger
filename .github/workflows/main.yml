@@ -24,8 +24,7 @@ jobs:
           cache: npm
 
       - name: Install deps
-        run: |
-            npm install
+        run: npm install
 
       - name: Auth to Google Cloud
         uses: google-github-actions/auth@v2
