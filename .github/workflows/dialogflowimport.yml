@@ -1,0 +1,27 @@
+name: Deploy Dialogflow CX Agent
+
+on:
+  push:
+    branches: [ "DialogFlow" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Import Dialogflow CX Agent
+        run: |
+          gcloud dialogflow cx agents import \
+            --agent=projects/${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b \
+            --source=/ \
+            --quiet
