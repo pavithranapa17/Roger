@@ -20,9 +20,13 @@ jobs:
           export_default_credentials: true
           install_components: alpha
 
+      - name: Create agent.zip
+        run: |
+          zip -r agent.zip agent.json flows intents webhooks generativeSettings
+          
       - name: Import Dialogflow CX Agent
         run: |
           gcloud alpha dialogflow cx agents import \
             --agent=projects/${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b \
-            --source=/ \
+            --source="./agent.zip" \
             --quiet
