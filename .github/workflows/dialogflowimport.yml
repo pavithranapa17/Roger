@@ -12,6 +12,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Install gcloud beta
+        run: gcloud components install beta --quiet
+
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
