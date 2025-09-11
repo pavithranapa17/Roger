@@ -12,22 +12,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Add Google Cloud SDK repo
-        run: |
-            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
-            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-            sudo apt-get update
-
-      - name: Install gcloud beta component
-        run: |
-          sudo apt-get install -y google-cloud-cli-beta
-
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
+          install_components: beta
 
       - name: Import Dialogflow CX Agent
         run: |
