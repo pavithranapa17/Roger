@@ -47,7 +47,7 @@ jobs:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           LOCATION_ID: ${{ secrets.GCP_AGENT_REGION }}
           AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
-          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
+  
         run: |
           cxcli agent restore "$AGENT_ID" \
             --project-id "$PROJECT_ID" \
