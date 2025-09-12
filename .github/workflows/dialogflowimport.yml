@@ -24,7 +24,7 @@ jobs:
           set -e
           sudo apt-get update -y
           sudo apt-get install -y zip unzip curl
-          CXCLI_URL="https://github.com/GoogleCloudPlatform/dialogflow-cx-cli/releases/latest/download/cxcli_Linux_x86_64.tar.gz"
+          CXCLI_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz"
           curl -L -o cxcli.tar.gz "$CXCLI_URL"
           mkdir cxcli_unpack
           tar -xzf cxcli.tar.gz -C cxcli_unpack
