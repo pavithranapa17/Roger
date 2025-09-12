@@ -52,7 +52,7 @@ jobs:
           --location-id "us-central1" \
           --locale "en" \
           --timezone "America/Los_Angeles" \
-         
+          --credentials gcp-key.json
 
       - name: Get Agent ID by Display Name
         id: get_agent_id
@@ -61,7 +61,7 @@ jobs:
           AGENT_ID=$(cxcli agent list \
             --project-id "roger-470808" \
             --location-id "us-central1" \
-            --credentials gcp-key.json 
+            --credentials gcp-key.json
             --output json | jq -r --arg NAME "RogerBot" '.[] | select(.displayName==$NAME) | .name')
           if [ -z "$AGENT_ID" ]; then
             echo "Agent with display name 'RogerBot' not found."
