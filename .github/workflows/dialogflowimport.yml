@@ -33,12 +33,18 @@ jobs:
       - name: Verify blob
         run: |
           test -f agent.blob || (echo "agent.blob not created"; exit 1)
-          
+
+      - name: Set up GCP credentials
+        run: |
+          echo "${{ secrets.GCP_SA_KEY }}" > gcp-key.json
+          export GOOGLE_APPLICATION_CREDENTIALS="gcp-key.json"
+    
       - name: Restore CX Agent with cxcli
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           LOCATION_ID: ${{ secrets.GCP_AGENT_REGION }}
           AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
           cxcli agent restore "$AGENT_ID" \
             --project-id "$PROJECT_ID" \
