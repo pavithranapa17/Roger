@@ -7,6 +7,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
 
     steps:
       - name: Checkout repo
