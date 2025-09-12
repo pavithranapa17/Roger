@@ -26,7 +26,7 @@ jobs:
           
       - name: Import Dialogflow CX Agent
         run: |
-          gcloud alpha dialogflow agent restore \
+          gcloud alpha dialogflow cx agents restore \
             --agent=projects/${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b \
             --agent-content-path="./agent.zip" \
             --quiet
