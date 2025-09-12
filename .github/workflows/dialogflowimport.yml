@@ -47,12 +47,11 @@ jobs:
 
       - name: Create CX Agent
         run: |
-          cxcli agent create \
+         cxcli agent create "RogerBot" \
           --project-id "roger-470808" \
           --location-id "us-central1" \
-          --display-name "RogerBot" \
-          --default-language-code "en" \
-          --time-zone "America/Los_Angeles" \
+          --locale "en" \
+          --timezone "America/Los_Angeles" \
           --credentials gcp-key.json
 
       - name: Get Agent ID by Display Name
