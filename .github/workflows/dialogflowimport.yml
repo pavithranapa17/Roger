@@ -3,13 +3,7 @@ name: Deploy Dialogflow CX Agent
 on:
   push:
     branches: [ "DialogFlow" ]
-    paths:
-      - agent.json
-      - flows/**
-      - intents/**
-      - webhooks/**
-      - generativeSettings/**
-  
+ 
 jobs:
   deploy:
     runs-on: ubuntu-latest
