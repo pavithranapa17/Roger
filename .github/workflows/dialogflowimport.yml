@@ -3,6 +3,12 @@ name: Deploy Dialogflow CX Agent
 on:
   push:
     branches: [ "DialogFlow" ]
+    paths:
+      - agent.json
+      - flows/**
+      - intents/**
+      - webhooks/**
+      - generativeSettings/**
 
 jobs:
   deploy:
@@ -30,7 +36,13 @@ jobs:
         
       - name: Create agent.zip
         run: |
+         for d in agent.json flows intents webhooks generativeSettings; do
+            if [ ! -e "$d" ]; then
+              echo "Missing expected item: $d"; ls -1; exit 1
+            fi
+          done
           zip -r agent.zip agent.json flows intents webhooks generativeSettings
+          ls -lh agent.zip  
           
       - name: Import Dialogflow CX Agent
         run: |
