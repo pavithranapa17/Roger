@@ -12,12 +12,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         
-      - name: Install Google Cloud CLI (full)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y google-cloud-cli
-          sudo apt-get install -y google-cloud-cli-beta
-        
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
         with:
@@ -41,10 +35,10 @@ jobs:
           test -f agent.zip || { echo "agent.zip not created"; exit 1; }
           BASE64_CONTENT=$(base64 -w0 agent.zip)
           gcloud dialogflow cx agents restore \
-            --agent="projects/${PROJECT_ID}/locations/${LOCATION}/agents/${AGENT_ID}" \
+            --agent="projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
             --inline-content="$BASE64_CONTENT" \
             --quiet || \
           gcloud beta dialogflow cx agents restore \
-            --agent="projects/${PROJECT_ID}/locations/${LOCATION}/agents/${AGENT_ID}" \
+            --agent="projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
             --inline-content="$BASE64_CONTENT" \
             --quiet
