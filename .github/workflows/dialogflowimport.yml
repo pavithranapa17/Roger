@@ -12,8 +12,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         
-      - name: Install Dialogflow CX component
-        run: gcloud components install beta --quiet && gcloud components install alpha --quiet
+      - name: Install Google Cloud CLI (full)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-cloud-cli
+          sudo apt-get install -y google-cloud-cli-beta
         
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2
