@@ -21,7 +21,10 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
           install_components: alpha
-
+          
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip unzip
+        
       - name: Create agent.zip
         run: |
           zip -r agent.zip agent.json flows intents webhooks generativeSettings
