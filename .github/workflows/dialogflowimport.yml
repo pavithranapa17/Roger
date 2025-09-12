@@ -44,7 +44,31 @@ jobs:
         run: |
           echo "${{ secrets.GCP_SA_KEY }}" > gcp-key.json
         shell: bash
-      
+
+      - name: Create CX Agent
+          cxcli agent create \
+          --project-id "roger-470808" \
+          --location-id "us-central1" \
+          --display-name "RogerBot" \
+          --default-language-code "en" \
+          --time-zone "America/Los_Angeles" \
+          --credentials gcp-key.json
+
+      - name: Get Agent ID by Display Name
+        id: get_agent_id
+        run: |
+          DISPLAY_NAME="RogerBot"   # replace with your agent's display name
+          AGENT_ID=$(cxcli agent list \
+            --project-id "roger-470808" \
+            --location-id "us-central1" \
+            --credentials gcp-key.json \
+            --output json | jq -r --arg NAME "RogerBot" '.[] | select(.displayName==$NAME) | .name')
+          if [ -z "$AGENT_ID" ]; then
+            echo "Agent with display name 'RogerBot' not found."
+            exit 1
+          fi
+          echo "AGENT_ID=$AGENT_ID" >> $GITHUB_ENV
+          echo "Found agent ID: $AGENT_ID"
       - name: Restore CX Agent with cxcli
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -52,7 +76,7 @@ jobs:
           AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
           
         run: |
-          cxcli agent restore "a5d3aefc-77de-4e69-8612-729ab84c5d98" \
+          cxcli agent restore "$AGENT_ID" \
             --project-id "roger-470808" \
             --location-id "us-central1" \
             --input agent.blob
