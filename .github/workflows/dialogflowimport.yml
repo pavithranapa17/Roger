@@ -7,8 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container:
-      image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
 
     steps:
       - name: Checkout repo
@@ -20,10 +18,15 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-          install_components: alpha
+          install_components: beta
           
-      - name: Install zip
-        run: apt-get update && apt-get install -y zip unzip
+      - name: Create agent.zip
+        working-directory: dialogflow
+        run: |
+          ls -1
+          zip -r agent.zip agent.json flows intents webhooks generativeSettings
+          mv agent.zip ../agent.zip
+        shell: bash
         
       - name: Create agent.zip
         run: |
@@ -31,7 +34,13 @@ jobs:
           
       - name: Import Dialogflow CX Agent
         run: |
-          gcloud alpha dialogflow cx agents restore \
-            --agent=projects/${{ secrets.GOOGLE_FUNCTIONS_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b \
-            --agent-content-path="./agent.zip" \
+          test -f agent.zip || { echo "agent.zip not created"; exit 1; }
+          BASE64_CONTENT=$(base64 -w0 agent.zip)
+          gcloud dialogflow cx agents restore \
+            --agent="projects/${PROJECT_ID}/locations/${LOCATION}/agents/${AGENT_ID}" \
+            --inline-content="$BASE64_CONTENT" \
+            --quiet || \
+          gcloud beta dialogflow cx agents restore \
+            --agent="projects/${PROJECT_ID}/locations/${LOCATION}/agents/${AGENT_ID}" \
+            --inline-content="$BASE64_CONTENT" \
             --quiet
