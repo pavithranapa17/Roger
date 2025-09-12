@@ -42,7 +42,9 @@ jobs:
 
       - name: List Agents
         run: |
-         cxcli agent list --project-id "roger-470808" --location-id "us-central1"
+         cxcli agent list 
+         --project-id "roger-470808" \
+         --location-id "us-central1" \
       
       - name: Restore CX Agent with cxcli
         env:
