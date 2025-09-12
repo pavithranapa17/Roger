@@ -46,6 +46,7 @@ jobs:
         shell: bash
 
       - name: Create CX Agent
+        run: |
           cxcli agent create \
           --project-id "roger-470808" \
           --location-id "us-central1" \
