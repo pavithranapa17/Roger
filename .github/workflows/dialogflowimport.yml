@@ -18,27 +18,28 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-          install_components: beta
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip unzip curl
+          curl -sSL https://raw.githubusercontent.com/googleapis/cxcli/main/install.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
         
-      - name: Create agent.zip
+      - name: Zip Dialogflow CX agent
         run: |
-         for d in agent.json flows intents webhooks generativeSettings; do
-            if [ ! -e "$d" ]; then
-              echo "Missing expected item: $d"; ls -1; exit 1
-            fi
-          done
-          zip -r agent.zip agent.json flows intents webhooks generativeSettings
-          ls -lh agent.zip  
+          zip -r agent.blob agent.json flows intents webhooks generativeSettings
+
+      - name: Verify blob
+        run: |
+          test -f agent.blob || (echo "agent.blob not created"; exit 1)
           
-      - name: Import Dialogflow CX Agent
+      - name: Restore CX Agent with cxcli
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          LOCATION_ID: ${{ secrets.GCP_AGENT_REGION }}
+          AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
         run: |
-          test -f agent.zip || { echo "agent.zip not created"; exit 1; }
-          BASE64_CONTENT=$(base64 -w0 agent.zip)
-          gcloud dialogflow cx agents restore \
-            --agent="projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
-            --inline-content="$BASE64_CONTENT" \
-            --quiet || \
-          gcloud beta dialogflow cx agents restore \
-            --agent="projects/${{ secrets.GCP_PROJECT_ID }}/locations/${{ secrets.GCP_AGENT_REGION }}/agents/3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
-            --inline-content="$BASE64_CONTENT" \
-            --quiet
+          cxcli agent restore "$AGENT_ID" \
+            --project-id "$PROJECT_ID" \
+            --location-id "$LOCATION_ID" \
+            --input agent.blob
