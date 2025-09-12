@@ -33,28 +33,6 @@ jobs:
       - name: Verify blob
         run: |
           test -f agent.blob || (echo "agent.blob not created"; exit 1)
-        env:
-          GCP_SA_KEY: |
-            {
-              "type": "service_account",
-              "project_id": "roger-470808",
-              "private_key_id": "8458aeb385b8b221005506b2d2cfdb02549e4235",
-              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJyAZ8X4ORrbki\n+j0B82MyQaTVr0BtahlaC35YieYS5XeZIOjLCUgtfsHsg+xvHbZ1TRsRWpTAkUum\nFbrXKEaAVu/5EL0xhLmc9+MXsGoahRc2+A0Swy9FKU+KsQ/kgeXvnzH3Dk87dCkS\nJ8RwykHbhSQ0gPQB8vGpze1W61AXKGh43Mrfr6+bZgeHFqGK40IfUpaa2GyRLfjD\nf0SIuy0e3V5X6WSs04XWu4/PVg32mrNsQFobG0bce/x81gBjx+G4773orpCGsFMf\nprjxSr7C06mMMc0B77J/imcku6wmOfTFftCS6zDlJ4nqCoIxAnjj4UDDkh5q76CJ\nkm/U9wAhAgMBAAECggEADBMb7j/h9er9J+5tDauUnUqH1GCtHI8LjtOevyobWjig\nkEmDnLjEuLI75Q0c7iZLR5gyXTa8LYzUR89Hk739gAsTx6X8iFTOram4zW9ZXhZm\nRfwQfjWvY7Zd4+kGEDDEw3LVkNjqnV5tYcB+9RfpWntMaBbqYx54XyarQ/cHXydI\n62Xd1Z/MCrZX6dsTKBem8mDnmSntv4B4I+m0UAW4aaMFS8J0kb7bi49PjIWo+uAe\neFs9vFtg7lk2upFHig/NW+HeZvnACBUgvmgSOVUJHwy4obSg0nu6/rG+M2X9oSMy\nC58zi6ZqJf+5sVsUjEZM0biP2fVeZvj8V00NccJ01QKBgQDlEqaaJfQJxfkAUHwU\nnQ0ouN4dsy1SFC/RItSnZ7gaOTSZiW+MJ03qhtDYmIJPQbe13Ejy5EjJs4OnfE+b\nZY2kMH6AageJ2xb9k7L6cPh1YCkl2pywcqXFt00d1tYBTlGRQ7PQZyLTXLfLU601\n6QuLXn+cDOpwms49k7xF2Z+6NQKBgQDhgBuj28ACsIka+q4h/pN3FkWa3F+qVKMu\nmoY1B66w9VSAJkX+kJ+uo7nAN4xADPSHBV6dy63M/sqqbmbkMhWG+U7FjvY04Yo7\n38//GWEGpoP031dK3dBEMWbCqUnqJ1hPepitcTDnPYoWaYiydyMZDzSIRIlVkaKQ\nyEe63ClLvQKBgQDCdlHOXFfOEC0w0iJzkVuBbWbJybi4jACHxszGDGuif1ui16RF\nU3x2ktoqdVVyGPTuwsF+yMLtz6H9Ba/C2LQkZTKOqvQZWE8tFzyCFHMnmWl1BB+u\nPrVxogkqQp3L4AOokNPOIC/VREmWp0NMl7jAKImmHOTMkO5yIb9bgMJy3QKBgF3s\nfxa78/jq0OCU4yyznXZvp2Q+P/ZxNFq38Ahsf72jIaQSzPqgAHK8LSU7vcX732nR\nubwd1vFYes+MFn0bw02pz76HslMKUgpoSXkmd/xOJQ48bF55j0KoFPYljuzhoG3S\nUX+EcusN/dMh99bluo+4fpf3fABRHZYSZZYWF3k9AoGAWD2Q+onahfLHoIAZAj9g\nm8DQOyNAzE+DVXWEr+oz2p7w49TSuIbt8fE+/Ze7yxKrmKD6oLbCnwVBNhmjY8m+\nPDfjOCXkO3QORi42tyJIrp3+A5PatqVOLWN35oQc1KxKF/0sJEoZw2QFtfgfwA/w\nR79wF/JOFRfG9lHsmQqfiJM=\n-----END PRIVATE KEY-----\n",
-              "client_email": "rogers-serviceaccount@roger-470808.iam.gserviceaccount.com",
-              "client_id": "107866090560932962580",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/rogers-serviceaccount%40roger-470808.iam.gserviceaccount.com",
-              "universe_domain": "googleapis.com"
-            }
-      - name: Set up GCP credentials
-        run: |
-          # Write the secret to a JSON file safely
-          echo "$GCP_SA_KEY" > gcp-key.json
-          sed -i 's/\\n/\n/g' gcp-key.json
-          # Set the environment variable for authentication
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json" >> $GITHUB_ENV
     
       - name: Restore CX Agent with cxcli
         env:
