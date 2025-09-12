@@ -39,7 +39,11 @@ jobs:
       - name: Verify blob
         run: |
           test -f agent.blob || (echo "agent.blob not created"; exit 1)
-    
+
+      - name: List Agents
+        run: |
+         cxcli agent list --project-id "roger-470808" --location-id "us-central1"
+      
       - name: Restore CX Agent with cxcli
         env:
           PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -47,6 +51,7 @@ jobs:
           AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
   
         run: |
+         
           cxcli agent restore "3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
             --project-id "roger-470808" \
             --location-id "us-central1" \
