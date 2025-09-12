@@ -37,7 +37,7 @@ jobs:
       - name: Set up GCP credentials
         run: |
           # Write the secret to a JSON file safely
-          echo "${{ secrets.GCP_SA_KEY }}" | tr -d '\r' > gcp-key.json
+          echo "${{ vars.GCP_SA_KEY }}" | tr -d '\r' > gcp-key.json
           sed -i 's/\\n/\n/g' gcp-key.json
           # Set the environment variable for authentication
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp-key.json" >> $GITHUB_ENV
