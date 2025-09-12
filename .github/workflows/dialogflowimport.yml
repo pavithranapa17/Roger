@@ -21,12 +21,26 @@ jobs:
           
       - name: Install tools + cxcli
         run: |
+          set -e
           sudo apt-get update -y
           sudo apt-get install -y zip unzip curl
-          CXCLI_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz"
+          CXCLI_URL="https://github.com/GoogleCloudPlatform/dialogflow-cx-cli/releases/latest/download/cxcli_Linux_x86_64.tar.gz"
           curl -L -o cxcli.tar.gz "$CXCLI_URL"
-          tar -xzf cxcli.tar.gz
-          sudo mv cxcli /usr/local/bin/
+          mkdir cxcli_unpack
+          tar -xzf cxcli.tar.gz -C cxcli_unpack
+          echo "Archive contents:"
+          find cxcli_unpack -maxdepth 3 -type f -size +0c -printf '%P\n'
+          # Find the binary named 'cxcli'
+          CXCLI_PATH=$(find cxcli_unpack -type f -name cxcli -perm -u+x | head -n1)
+          if [ -z "$CXCLI_PATH" ]; then
+            # Try making a candidate executable if present
+            CANDIDATE=$(find cxcli_unpack -type f -name cxcli | head -n1)
+            [ -n "$CANDIDATE" ] && chmod +x "$CANDIDATE" && CXCLI_PATH="$CANDIDATE"
+          fi
+          if [ -z "$CXCLI_PATH" ]; then
+            echo "cxcli binary not found in archive"; exit 1
+          fi
+          sudo install -m 755 "$CXCLI_PATH" /usr/local/bin/cxcli
           cxcli --version
         
       - name: Zip Dialogflow CX agent
