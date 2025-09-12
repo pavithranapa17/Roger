@@ -52,7 +52,7 @@ jobs:
           AGENT_ID: ${{ secrets.GCP_AGENT_ID }}
           
         run: |
-          cxcli agent restore "3bbd52b8-6446-4dc1-915c-ad084a5b192b" \
+          cxcli agent restore "a5d3aefc-77de-4e69-8612-729ab84c5d98" \
             --project-id "roger-470808" \
             --location-id "us-central1" \
             --input agent.blob
